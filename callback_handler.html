@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <link rel="icon" href="/static/favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="/javascripts/picup.2.1.js"></script>
+    <script type="text/javascript">
+      var isIPad = navigator.userAgent.indexOf('iPad') != -1;
+      var isIPhone = navigator.userAgent.indexOf('iPhone') != -1;
+
+      window.name = 'transactioncomplete';
+      var url = window.location.toString();
+      var delimiterPos = url.indexOf('#')
+      var params = ""
+
+      if(delimiterPos != -1){
+        params = url.match(/\#(.+)/);
+      }else{
+        params = url.match(/\?(.+)/);
+      }
+
+      var paramOutput = [];
+      var paramHash = {}
+      var callbackURL = null;
+      // We know the name of the calling window
+      var windowName = 'picuptest';
+      if(params){
+        var paramString = params[1];
+        var paramKVs = paramString.split('&');
+        for(var p=0;p<paramKVs.length;p++){
+          var kvp = paramKVs[p];
+          // we only want to split on the first =, since data:URLs can have = in them
+          var kv = kvp.replace('=', '&').split('&');
+          var keyname = unescape(kv[0]);
+          var keyvalue = unescape(kv[1]);
+          paramHash[keyname] = keyvalue
+          paramOutput.push(keyname+' = '+keyvalue);
+        }
+        callbackURL = window.location.host + '#' + paramString;
+      } 
+      
+      function returnToOrigin(){
+        if(callbackURL){
+          window.open(unescape(escape(callbackURL)), windowName);
+        }
+
+        window.close();
+      }
+    </script>
+  </head>
+  <body onload="returnToOrigin()">
+    redirecting...
+  </body>
+</html>

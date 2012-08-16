@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <link rel="icon" href="/static/favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="/javascripts/picup.2.1.js"></script>
+    <script>
+      function picupLoader(){
+        window.name = "jingkrak";
+        Picup2.checkHash();
+
+        var callbackUrl = window.location + '/callback';
+        var faviconUrl = window.location + '/static/favicon.ico'
+
+        currentParams = {
+          'callbackURL': callbackUrl,
+          'referrername': escape('Manteb Jingkrak!'),
+          'referrerfavicon': escape(faviconUrl),
+          'purpose': escape('To Rules The World!'),
+          'debug': 'false'
+        }
+
+        Picup2.convertFileInput('photo', currentParams);
+      }
+
+      /*
+        callback params:
+        file[0][status] = "Complete"
+        file[0][debug] = "true"
+        file[0][remoteFileURL] = "http://aaaa.jpg
+        file[0][fileSource] = "Photo Library"
+        file[0][picID] = p3
+      */
+
+      Picup2.callbackHandler = function(params){
+        var inHTML = ""
+        for (var key in params){
+          inHTML += ("params[" + key + "] = " + params[key] + "<br>");
+        }
+
+        document.getElementById('content').innerHTML = inHTML;
+      }
+    </script>
+  </head>
+  <body onload="picupLoader()">
+    <h3>Test Jingkrak Upload</h3>
+    <form action='/create' method='post'>
+      <input type='file' name='filename' id='photo'><br>
+      <input type='edit' name='jingkrak'><br>
+      <input type='submit' value='Submit'>
+    </form>
+
+    <hr>
+    Params return:<br>
+    <div id="content">
+      
+    </div>
+  </body>
+</html>
